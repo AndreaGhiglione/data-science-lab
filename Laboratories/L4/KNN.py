@@ -39,7 +39,7 @@ class KNearestNeighbors:
                 current_distance = self.DISTANCE[self.distance_metric](flower,comparison_flower)  # I switch among functions based on the distance_metric
                 euclidean_distances[flower_index,comparison_flower_index] = current_distance
 
-        # 2d np array with shape (len(self.X_test),len(self.X_train)) with indeces of nearest k flowers
+        # 2d np array with shape (len(self.X_test),k) with indeces of nearest k flowers
         k_neighbors_indeces = euclidean_distances.argsort()[:, :self.k]
 
         for flower_index, neighbors_indeces in enumerate(k_neighbors_indeces):
