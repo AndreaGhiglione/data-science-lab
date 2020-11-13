@@ -20,7 +20,7 @@ clf.fit(X,y)
 
 # 3
 dot = export_graphviz(clf)
-# print(dot)
+print(dot)
 
 # 4
 y_pred = clf.predict(X)
