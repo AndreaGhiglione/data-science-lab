@@ -32,7 +32,6 @@ jump_Hz = 60  # chunks of jump_Hz
 windows = int((end_Hz - start_Hz) / jump_Hz)
 X = pd.DataFrame(np.zeros((len(dev_files),windows)))
 for i in range(len(dev_files)):
-    print(i)
     samplerate, data = wavfile.read(f"free-spoken-digit/dev/{dev_files[i]}")
     N = data.shape[0]
     T = 1.0/8000  # sampling interval in time , sr: 8000
@@ -63,7 +62,6 @@ jump_Hz = 60
 windows = int((end_Hz - start_Hz) / jump_Hz)
 X = pd.DataFrame(np.zeros((len(eval_files),windows)))
 for i in range(len(eval_files)):
-    print(i)
     samplerate, data = wavfile.read(f"free-spoken-digit/eval/{eval_files[i]}")
     N = data.shape[0]
     T = 1.0/8000
