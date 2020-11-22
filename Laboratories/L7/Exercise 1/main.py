@@ -7,7 +7,7 @@ from sklearn.metrics import f1_score
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 
-def get_ffts_freqs(samplerate,data):
+def get_fft_freqs(samplerate,data):
     N = data.shape[0]
     T = 1 / samplerate  # sampling interval in time
     secs = N / samplerate
@@ -16,7 +16,7 @@ def get_ffts_freqs(samplerate,data):
     freqs_side = np.array(freqs[range(int(N / 2))])
     fft_freqs_side = np.array(freqs_side)  # one side frequency range
     FFT = abs(scipy.fft.fft(data))
-    FFT_side = FFT[range(int(N / 2))]  # one side FFT range
+    FFT_side = FFT[: N//2]  # one side FFT range
     return fft_freqs_side,FFT_side
 
 def chunks(windows, window_Hz, freqs, FFT,start_Hz):
@@ -46,9 +46,9 @@ file_names = [f.split(".")[0] for f in dev_files]
 y = np.array([f.split("_")[1] for f in file_names])
 
 X = pd.DataFrame(np.zeros((len(dev_files),windows)))
-for i in range(len(dev_files)):
-    samplerate, data = wavfile.read(f"free-spoken-digit/dev/{dev_files[i]}")
-    fft_freqs_side, FFT_side = get_ffts_freqs(samplerate,data)
+for i,file in enumerate(dev_files):
+    samplerate, data = wavfile.read(f"free-spoken-digit/dev/{file}")
+    fft_freqs_side, FFT_side = get_fft_freqs(samplerate,data)
     X.iloc[i] = chunks(windows, jump_Hz, fft_freqs_side, FFT_side,start_Hz)
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
@@ -63,9 +63,9 @@ print(f'F1 score: {round(f1_score(y_pred,y_test,average="macro"),3)}')
 eval_files = os.listdir("free-spoken-digit/eval/")
 
 X = pd.DataFrame(np.zeros((len(eval_files),windows)))
-for i in range(len(eval_files)):
-    samplerate, data = wavfile.read(f"free-spoken-digit/eval/{eval_files[i]}")
-    fft_freqs_side, FFT_side = get_ffts_freqs(samplerate, data)
+for i,file in enumerate(eval_files):
+    samplerate, data = wavfile.read(f"free-spoken-digit/eval/{file}")
+    fft_freqs_side, FFT_side = get_fft_freqs(samplerate, data)
     X.iloc[i] = chunks(windows, jump_Hz, fft_freqs_side, FFT_side,start_Hz)
 
 y_eval_pred = clf.predict(X)
