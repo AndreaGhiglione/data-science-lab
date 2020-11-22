@@ -1,8 +1,8 @@
 import os
-from scipy.io import wavfile
 import scipy
 import numpy as np
 import pandas as pd
+from scipy.io import wavfile
 from sklearn.metrics import f1_score
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
@@ -13,7 +13,7 @@ def get_fft_freqs(samplerate,data):
     secs = N / samplerate
     t = np.arange(0, secs, T)
     freqs = scipy.fft.fftfreq(len(data), t[1] - t[0])
-    freqs_side = np.array(freqs[range(int(N / 2))])
+    freqs_side = np.array(freqs[: N//2])
     fft_freqs_side = np.array(freqs_side)  # one side frequency range
     FFT = abs(scipy.fft.fft(data))
     FFT_side = FFT[: N//2]  # one side FFT range
