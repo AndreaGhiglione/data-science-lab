@@ -26,13 +26,10 @@ class KMeans:
         iteration = 1
         while not np.array_equal(self.centroids,previous_centroids) and iteration <= self.max_iter:
             for point_id in range(len(X)):
-                min_dist = self.euclidean_distance(X[point_id],self.centroids[0])
-                self.labels[point_id] = 0
+                curr_dist = []
                 for centroid_id in range(len(self.centroids)):
-                    curr_dist = self.euclidean_distance(X[point_id],self.centroids[centroid_id])
-                    if curr_dist < min_dist:
-                        min_dist = curr_dist
-                        self.labels[point_id] = centroid_id
+                    curr_dist.append(self.euclidean_distance(X[point_id],self.centroids[centroid_id]))
+                self.labels[point_id] = np.argmin(np.array(curr_dist))
 
             """Compute new centroids"""
             previous_centroids = self.centroids.copy()
